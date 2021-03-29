@@ -1,15 +1,29 @@
-const CustomError = require("../extensions/custom-error");
-
 module.exports = function repeater(str, options) {
-  let splitter = options.separator || '+';
-  let result = '';
-  let addition = options.addition || '';
-  let repeat = options.repeatTimes || 1;
-  let additionRepeatTimes = options.additionRepeatTimes-1 || 0;
-  const repeatS = additionRepeatTimes + repeat
-  for (let i=0; i < repeatS; i++){
-    result = result ? result + splitter + str + addition : str + addition;
+  const {
+    repeatTimes = 1,
+    separator = '+',
+    addition = '',
+    additionRepeatTimes = 1,
+    additionSeparator = '|'
+  } = options;
+
+  if (repeatTimes === undefined) {
+    return ''
   }
-  return result;
-};
-  
+
+  let strReps = [];
+  const sepReps = [];
+
+  for (let i = 0; i < repeatTimes; i++) {
+    strReps.push(str);
+  }
+
+  for (let i = 0; i < additionRepeatTimes; i++) {
+    sepReps.push(`${addition}`);
+  }
+
+  const addSepStr = sepReps.join(additionSeparator);
+
+  strReps = strReps.map((e) => e + addSepStr)
+  return strReps.join(separator);
+}; 
